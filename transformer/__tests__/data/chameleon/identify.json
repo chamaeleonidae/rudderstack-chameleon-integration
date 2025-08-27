@@ -1,0 +1,73 @@
+[
+  {
+    "description": "Identify event with all fields",
+    "input": {
+      "message": {
+        "type": "identify",
+        "userId": "user123",
+        "anonymousId": "anon456", 
+        "traits": {
+          "email": "test@example.com",
+          "firstName": "John",
+          "lastName": "Doe",
+          "plan": "pro",
+          "company_id": "company123",
+          "company_name": "Acme Corp"
+        },
+        "timestamp": "2024-01-01T00:00:00.000Z",
+        "messageId": "msg_abc123"
+      },
+      "destination": {
+        "Config": {
+          "accountSecret": "test-account-secret-123"
+        }
+      }
+    },
+    "output": {
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-account-secret-123/profiles",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "RudderStack-Chameleon-Integration/1.0.0"
+      },
+      "body": {
+        "JSON": {
+          "uid": "user123",
+          "email": "test@example.com",
+          "anonymousId": "anon456",
+          "company_uid": "company123", 
+          "company_name": "Acme Corp",
+          "timestamp": "2024-01-01T00:00:00.000Z",
+          "messageId": "msg_abc123"
+        }
+      }
+    }
+  },
+  {
+    "description": "Identify event with minimal data",
+    "input": {
+      "message": {
+        "type": "identify",
+        "userId": "user456"
+      },
+      "destination": {
+        "Config": {
+          "accountSecret": "test-secret"
+        }
+      }
+    },
+    "output": {
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-secret/profiles", 
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "RudderStack-Chameleon-Integration/1.0.0"
+      },
+      "body": {
+        "JSON": {
+          "uid": "user456"
+        }
+      }
+    }
+  }
+]

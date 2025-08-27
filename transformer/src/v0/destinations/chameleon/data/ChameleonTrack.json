@@ -1,0 +1,39 @@
+{
+  "destKey": [
+    {
+      "destKey": "name",
+      "sourceKeys": "event",
+      "required": true
+    },
+    {
+      "destKey": "uid",
+      "sourceKeys": "userId",
+      "required": false
+    },
+    {
+      "destKey": "anonymousId", 
+      "sourceKeys": "anonymousId",
+      "required": false
+    },
+    {
+      "destKey": "properties",
+      "sourceKeys": "properties",
+      "required": false
+    },
+    {
+      "destKey": "timestamp",
+      "sourceKeys": "timestamp",
+      "required": false
+    },
+    {
+      "destKey": "messageId",
+      "sourceKeys": "messageId",
+      "required": false
+    },
+    {
+      "destKey": "context",
+      "sourceKeys": "context",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+[
+  {
+    "description": "Group event with company details",
+    "input": {
+      "message": {
+        "type": "group",
+        "groupId": "company123",
+        "traits": {
+          "name": "Acme Corp",
+          "domain": "acme.com", 
+          "plan": "enterprise",
+          "employees": 50,
+          "industry": "SaaS"
+        },
+        "timestamp": "2024-01-01T03:00:00.000Z",
+        "messageId": "msg_ghi789"
+      },
+      "destination": {
+        "Config": {
+          "accountSecret": "test-account-secret-123"
+        }
+      }
+    },
+    "output": {
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-account-secret-123/companies",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "RudderStack-Chameleon-Integration/1.0.0"
+      },
+      "body": {
+        "JSON": {
+          "uid": "company123",
+          "name": "Acme Corp", 
+          "domain": "acme.com",
+          "plan": "enterprise",
+          "number_of_employees": 50,
+          "industry": "SaaS",
+          "timestamp": "2024-01-01T03:00:00.000Z",
+          "messageId": "msg_ghi789"
+        }
+      }
+    }
+  },
+  {
+    "description": "Group event minimal",
+    "input": {
+      "message": {
+        "type": "group",
+        "groupId": "company456",
+        "traits": {
+          "name": "StartupXYZ"
+        }
+      },
+      "destination": {
+        "Config": {
+          "accountSecret": "test-secret"
+        }
+      }
+    },
+    "output": {
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-secret/companies",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "RudderStack-Chameleon-Integration/1.0.0" 
+      },
+      "body": {
+        "JSON": {
+          "uid": "company456",
+          "name": "StartupXYZ"
+        }
+      }
+    }
+  }
+]

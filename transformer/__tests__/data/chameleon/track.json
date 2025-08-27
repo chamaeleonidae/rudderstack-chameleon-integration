@@ -1,0 +1,78 @@
+[
+  {
+    "description": "Track event with properties",
+    "input": {
+      "message": {
+        "type": "track",
+        "event": "Button Clicked",
+        "userId": "user123",
+        "properties": {
+          "button_name": "Sign Up",
+          "page": "/landing"
+        },
+        "timestamp": "2024-01-01T01:00:00.000Z",
+        "messageId": "msg_def456"
+      },
+      "destination": {
+        "Config": {
+          "accountSecret": "test-account-secret-123"
+        }
+      }
+    },
+    "output": {
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-account-secret-123/events",
+      "method": "POST", 
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "RudderStack-Chameleon-Integration/1.0.0"
+      },
+      "body": {
+        "JSON": {
+          "name": "Button Clicked",
+          "uid": "user123",
+          "properties": {
+            "button_name": "Sign Up",
+            "page": "/landing"
+          },
+          "timestamp": "2024-01-01T01:00:00.000Z",
+          "messageId": "msg_def456"
+        }
+      }
+    }
+  },
+  {
+    "description": "Track event without userId",
+    "input": {
+      "message": {
+        "type": "track",
+        "event": "Page Viewed", 
+        "anonymousId": "anon789",
+        "properties": {
+          "page": "/home"
+        }
+      },
+      "destination": {
+        "Config": {
+          "accountSecret": "test-secret"
+        }
+      }
+    },
+    "output": {
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-secret/events",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json", 
+        "User-Agent": "RudderStack-Chameleon-Integration/1.0.0"
+      },
+      "body": {
+        "JSON": {
+          "name": "Page Viewed",
+          "anonymousId": "anon789",
+          "properties": {
+            "page": "/home"
+          }
+        }
+      }
+    }
+  }
+]

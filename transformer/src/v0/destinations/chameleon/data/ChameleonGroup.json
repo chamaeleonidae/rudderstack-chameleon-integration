@@ -1,0 +1,59 @@
+{
+  "destKey": [
+    {
+      "destKey": "uid",
+      "sourceKeys": "groupId",
+      "required": true
+    },
+    {
+      "destKey": "name",
+      "sourceKeys": ["traits.name", "traits.company_name", "traits.companyName"],
+      "required": false
+    },
+    {
+      "destKey": "domain",
+      "sourceKeys": ["traits.domain", "traits.website"],
+      "required": false
+    },
+    {
+      "destKey": "plan",
+      "sourceKeys": ["traits.plan", "traits.subscription", "traits.subscription_type"],
+      "required": false
+    },
+    {
+      "destKey": "industry",
+      "sourceKeys": ["traits.industry", "traits.vertical"],
+      "required": false
+    },
+    {
+      "destKey": "number_of_employees",
+      "sourceKeys": ["traits.employees", "traits.number_of_employees", "traits.employee_count"],
+      "required": false
+    },
+    {
+      "destKey": "annual_revenue",
+      "sourceKeys": ["traits.annual_revenue", "traits.revenue"],
+      "required": false
+    },
+    {
+      "destKey": "founded_year",
+      "sourceKeys": ["traits.founded_year", "traits.founded", "traits.founded_date"],
+      "required": false
+    },
+    {
+      "destKey": "traits",
+      "sourceKeys": "traits",
+      "required": false
+    },
+    {
+      "destKey": "timestamp",
+      "sourceKeys": "timestamp",
+      "required": false
+    },
+    {
+      "destKey": "messageId",
+      "sourceKeys": "messageId",
+      "required": false
+    }
+  ]
+}

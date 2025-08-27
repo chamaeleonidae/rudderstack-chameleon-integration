@@ -1,0 +1,44 @@
+{
+  "destKey": [
+    {
+      "destKey": "uid",
+      "sourceKeys": "userId",
+      "required": true
+    },
+    {
+      "destKey": "email", 
+      "sourceKeys": ["traits.email", "context.traits.email"],
+      "required": false
+    },
+    {
+      "destKey": "traits",
+      "sourceKeys": ["traits", "context.traits"],
+      "required": false
+    },
+    {
+      "destKey": "company_uid",
+      "sourceKeys": ["traits.company_id", "context.traits.company_id", "traits.organizationId", "context.traits.organizationId"],
+      "required": false
+    },
+    {
+      "destKey": "company_name",
+      "sourceKeys": ["traits.company_name", "context.traits.company_name", "traits.company.name"],
+      "required": false
+    },
+    {
+      "destKey": "anonymousId",
+      "sourceKeys": "anonymousId",
+      "required": false
+    },
+    {
+      "destKey": "timestamp",
+      "sourceKeys": "timestamp",
+      "required": false
+    },
+    {
+      "destKey": "messageId",
+      "sourceKeys": "messageId",
+      "required": false
+    }
+  ]
+}
