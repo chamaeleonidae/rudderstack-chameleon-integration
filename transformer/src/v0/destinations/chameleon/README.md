@@ -16,13 +16,13 @@ To successfully configure Chameleon as a destination, you need to configure the 
 
 ### Account Secret
 
-Enter your Chameleon account secret. You can find this in your Chameleon dashboard under integrations.
+Enter your Chameleon account secret. You can generate this token from your [Chameleon dashboard](https://app.chameleon.io/settings/tokens) under Settings > API Tokens.
 
-**This field is required.**
+**This field is required and is used for API authentication via the X-Account-Secret header.**
 
 ## Supported Events
 
-Chameleon accepts the following event types:
+Chameleon accepts the following event types via its webhook API:
 
 ### Identify
 
@@ -50,17 +50,6 @@ rudderanalytics.track("Product Purchased", {
 });
 ```
 
-### Page
-
-The `page` call lets you record page views on your website along with the other relevant information about the page.
-
-**Sample page call:**
-```javascript
-rudderanalytics.page("Home", {
-  title: "Welcome to our site",
-  url: "https://example.com/"
-});
-```
 
 ### Group
 
@@ -77,28 +66,25 @@ rudderanalytics.group("company_123", {
 
 ## Data Mapping
 
-### Identify Events
-- Maps to Chameleon user profiles endpoint: `/profiles`
-- `userId` becomes `uid`
-- `traits` mapped to user properties
-- Company information extracted to `company_uid` and `company_name`
+### Identify Events → User Profiles
+- **Endpoint**: `https://api.chameleon.io/v3/observe/hooks/profiles`
+- **Mapping**: `userId` → `uid`, `traits` → user properties
+- **Company Linking**: `company_uid` and `company_name` from traits
+- **Purpose**: Create/update user profiles in Chameleon
 
-### Track Events  
-- Maps to Chameleon events endpoint: `/events`
-- `event` becomes `name`
-- `properties` preserved as event properties
-- User identification via `userId` or `anonymousId`
+### Track Events → Custom Events
+- **Endpoint**: `https://api.chameleon.io/v3/observe/hooks/events`  
+- **Mapping**: `event` → `name`, `properties` → event properties
+- **User Association**: Via `userId` (required) or `anonymousId`
+- **Purpose**: Track events for goals, segmentation, and personalization
 
-### Page Events
-- Maps to Chameleon events endpoint: `/events` 
-- Converted to track event with name "Page Viewed"
-- URL and title extracted from properties or context
+### Group Events → Companies
+- **Endpoint**: `https://api.chameleon.io/v3/observe/hooks/companies`
+- **Mapping**: `groupId` → `uid`, `traits` → company properties
+- **Common Fields**: name, domain, plan, employees, industry
+- **Purpose**: Create/update company/organization records
 
-### Group Events
-- Maps to Chameleon companies endpoint: `/companies`
-- `groupId` becomes company `uid`
-- `traits` mapped to company properties
-- Common B2B fields like employees, domain, plan supported
+**Note**: Page events are not supported as Chameleon doesn't accept page tracking via their webhook API.
 
 ## Supported Identifiers
 
@@ -106,9 +92,21 @@ rudderanalytics.group("company_123", {
 - **Anonymous ID**: Supported for anonymous user tracking
 - **Group ID**: Maps to Chameleon company `uid`
 
-## Rate Limiting
+## Technical Details
 
-This destination uses Chameleon's webhook endpoints which have standard rate limiting. Events are processed in real-time.
+### Authentication
+- **Method**: X-Account-Secret header
+- **Token Source**: Chameleon Settings > API Tokens
+- **Security**: Keep your account secret secure and private
+
+### Data Processing
+- **Delivery**: Real-time HTTP POST requests
+- **Property Normalization**: Names converted to lowercase_underscore
+- **Data Limits**: 768 bytes per scalar value (Chameleon limitation)
+- **Error Handling**: Failed requests logged with specific error details
+
+### Rate Limiting
+Follows Chameleon's standard API rate limits for webhook endpoints. Events are processed synchronously for profiles/companies and asynchronously for events.
 
 ## Getting Help
 
