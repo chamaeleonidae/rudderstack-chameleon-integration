@@ -1,31 +1,28 @@
 # Rudderstack-Chameleon Integration
 
-This directory contains the implementation of the bidirectional Rudderstack-Chameleon integration.
+This repository contains a Rudderstack destination for sending data to Chameleon.
 
 ## Architecture
 
-### Phase 1: Outbound (Rudderstack Transformer)
-- **Repository**: Fork of `rudder-transformer`
+### Rudderstack Destination
+- **Repository**: Fork of `rudderlabs/rudder-transformer`
 - **Location**: `/src/v0/destinations/chameleon/`
-- **Purpose**: Transform Rudderstack events → Chameleon webhook format
-- **Events Supported**: `identify`, `track`, `page`
+- **Purpose**: Transform Rudderstack events and send to Chameleon's webhook API
+- **Events Supported**: `identify`, `track`, `group`
+- **Authentication**: `X-Account-Secret` header
 
-### Phase 2: Inbound (Existing Webhook Infrastructure)
-- **Endpoints**: Existing Chameleon webhook endpoints
-  - `https://api.chameleon.io/v3/observe/hooks/{account_secret}/profiles`
-  - `https://api.chameleon.io/v3/observe/hooks/{account_secret}/companies`
-  - `https://api.chameleon.io/v3/observe/hooks/{account_secret}/events`
-- **Purpose**: Receive data from Rudderstack → Chameleon system
-
-### Phase 3: Dashboard Configuration
-- **File**: `IntegrationsRudderstack.jsx`
-- **Pattern**: Similar to Customer.io integration
-- **Features**: Toggle destinations, show webhook URLs
+### API Integration
+- **Base URL**: `https://api.chameleon.io/v3/observe/hooks/`
+- **Endpoints**:
+  - `POST /profiles` - Create/update user profiles
+  - `POST /events` - Track custom events  
+  - `POST /companies` - Create/update companies
+- **Data Flow**: Rudderstack → Chameleon (one-way)
 
 ## Implementation Status
 
-- [x] Architecture designed
-- [x] Existing patterns analyzed
-- [ ] Transformer implementation
-- [ ] Dashboard integration
-- [ ] Testing and documentation
+- [x] Destination transformer implemented
+- [x] All supported event types (identify, track, group)
+- [x] Comprehensive test suite
+- [x] Documentation complete
+- [x] Production-ready for Rudderstack PR submission

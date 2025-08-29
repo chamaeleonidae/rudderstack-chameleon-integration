@@ -130,7 +130,7 @@ describe('Chameleon Destination Transformer', () => {
 
       expect(result[0]).toHaveProperty('endpoint');
       expect(result[0].endpoint).toBe(
-        'https://api.chameleon.io/v3/observe/hooks/test-account-secret-123/profiles'
+        'https://api.chameleon.io/v3/observe/hooks/profiles'
       );
       expect(result[0].method).toBe('POST');
       expect(result[0].headers['Content-Type']).toBe('application/json');

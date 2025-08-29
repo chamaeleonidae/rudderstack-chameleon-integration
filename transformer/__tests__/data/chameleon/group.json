@@ -22,10 +22,11 @@
       }
     },
     "output": {
-      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-account-secret-123/companies",
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/companies",
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
+        "X-Account-Secret": "test-account-secret-123",
         "User-Agent": "RudderStack-Chameleon-Integration/1.0.0"
       },
       "body": {
@@ -59,10 +60,11 @@
       }
     },
     "output": {
-      "endpoint": "https://api.chameleon.io/v3/observe/hooks/test-secret/companies",
+      "endpoint": "https://api.chameleon.io/v3/observe/hooks/companies",
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
+        "X-Account-Secret": "test-secret",
         "User-Agent": "RudderStack-Chameleon-Integration/1.0.0" 
       },
       "body": {

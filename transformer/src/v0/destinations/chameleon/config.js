@@ -9,9 +9,6 @@ const ConfigCategory = {
   TRACK: {
     name: 'ChameleonTrack',
   },
-  PAGE: {
-    name: 'ChameleonPage',
-  },
   GROUP: {
     name: 'ChameleonGroup',
   },
@@ -19,15 +16,14 @@ const ConfigCategory = {
 
 const mappingConfig = getMappingConfig(ConfigCategory, __dirname);
 
-const getEndpoint = (accountSecret, type) => {
+const getEndpoint = (type) => {
   const endpoints = {
     identify: 'profiles',
-    track: 'events', 
-    page: 'events',
+    track: 'events',
     group: 'companies'
   };
   
-  return `${BASE_ENDPOINT}/${accountSecret}/${endpoints[type]}`;
+  return `${BASE_ENDPOINT}/${endpoints[type]}`;
 };
 
 module.exports = {

@@ -1,13 +1,13 @@
-# Rudderstack Chameleon Transformer
+# Rudderstack Chameleon Destination
 
-This transformer enables sending data from Rudderstack to Chameleon's webhook endpoints.
+This destination enables sending data from Rudderstack to Chameleon via their webhook API endpoints.
 
 ## Supported Events
 
 ### Identify
-Maps user identification data to Chameleon user profiles.
+Creates or updates user profiles in Chameleon.
 
-**Input**: Rudderstack identify event
+**Rudderstack Event**:
 ```json
 {
   "type": "identify",
@@ -20,22 +20,20 @@ Maps user identification data to Chameleon user profiles.
 }
 ```
 
-**Output**: Chameleon profile webhook
+**Sent to Chameleon**:
 ```json
 {
   "uid": "user123", 
   "email": "user@example.com",
-  "traits": {
-    "plan": "pro"
-  },
+  "plan": "pro",
   "company_uid": "company456"
 }
 ```
 
 ### Track  
-Maps custom events to Chameleon event tracking.
+Sends custom events to Chameleon for goal tracking and segmentation.
 
-**Input**: Rudderstack track event
+**Rudderstack Event**:
 ```json
 {
   "type": "track",
@@ -48,52 +46,21 @@ Maps custom events to Chameleon event tracking.
 }
 ```
 
-**Output**: Chameleon event webhook
+**Sent to Chameleon**:
 ```json
 {
   "name": "Button Clicked",
   "uid": "user123",
-  "properties": {
-    "button_name": "Sign Up", 
-    "page": "/landing"
-  }
+  "button_name": "Sign Up", 
+  "page": "/landing"
 }
 ```
 
-### Page
-Maps page views to Chameleon event tracking.
-
-**Input**: Rudderstack page event
-```json
-{
-  "type": "page",
-  "name": "Home Page",
-  "userId": "user123",
-  "properties": {
-    "url": "https://example.com/",
-    "title": "Welcome"
-  }
-}
-```
-
-**Output**: Chameleon event webhook  
-```json
-{
-  "name": "Page Viewed",
-  "uid": "user123",
-  "url": "https://example.com/",
-  "title": "Welcome",
-  "properties": {
-    "url": "https://example.com/",
-    "title": "Welcome"
-  }
-}
-```
 
 ### Group
-Maps group data to Chameleon company records.
+Creates or updates company/organization records in Chameleon.
 
-**Input**: Rudderstack group event
+**Rudderstack Event**:
 ```json
 {
   "type": "group",
@@ -108,7 +75,7 @@ Maps group data to Chameleon company records.
 }
 ```
 
-**Output**: Chameleon company webhook
+**Sent to Chameleon**:
 ```json
 {
   "uid": "company123",
@@ -123,13 +90,15 @@ Maps group data to Chameleon company records.
 ## Configuration
 
 ### Required Settings
-- **Account Secret**: Your Chameleon account secret for webhook authentication
+- **Account Secret**: Your Chameleon account secret for API authentication
 
-### Webhook Endpoints
-The transformer sends data to these Chameleon endpoints:
-- **Profiles**: `https://api.chameleon.io/v3/observe/hooks/{accountSecret}/profiles`
-- **Events**: `https://api.chameleon.io/v3/observe/hooks/{accountSecret}/events`
-- **Companies**: `https://api.chameleon.io/v3/observe/hooks/{accountSecret}/companies`
+### API Endpoints
+The destination sends data to these Chameleon webhook endpoints:
+- **Profiles**: `https://api.chameleon.io/v3/observe/hooks/profiles`
+- **Events**: `https://api.chameleon.io/v3/observe/hooks/events`
+- **Companies**: `https://api.chameleon.io/v3/observe/hooks/companies`
+
+Authentication is handled via the `X-Account-Secret` header.
 
 ## Installation
 
@@ -145,14 +114,15 @@ npm test
 
 ## Error Handling
 
-The transformer handles:
+The destination handles:
 - Missing account secret → `ConfigurationError`
-- Unsupported message types → `InstrumentationError`
+- Unsupported event types → `InstrumentationError`
 - Missing required fields (userId/groupId/event name) → `InstrumentationError`
 - Invalid payloads → Graceful degradation
 
-## Limits
+## Data Limits
 
-- Follows Chameleon's data limits (768 bytes per scalar value)
-- Property names normalized to lowercase and underscored
+- Up to 768 bytes per scalar value
+- Property names normalized to lowercase_underscore format
 - Arrays and nested objects supported
+- Event names normalized and case-insensitive

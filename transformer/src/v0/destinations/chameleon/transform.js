@@ -20,12 +20,14 @@ const { ConfigCategory, mappingConfig, getEndpoint } = require('./config');
  */
 const buildResponse = (payload, endpoint, destination) => {
   const response = defaultRequestConfig();
+  const { accountSecret } = destination.Config;
   
   response.endpoint = endpoint;
   response.body.JSON = removeUndefinedAndNullValues(payload);
   response.method = 'POST';
   response.headers = {
     'Content-Type': 'application/json',
+    'X-Account-Secret': accountSecret,
     'User-Agent': 'RudderStack-Chameleon-Integration/1.0.0'
   };
   
@@ -35,7 +37,7 @@ const buildResponse = (payload, endpoint, destination) => {
 /**
  * Validate required configuration
  * @param {Object} destination - Destination configuration
- * @throws {ConfigurationError} When account secret is missing
+ * @throws {ConfigurationError} When API token is missing
  */
 const validateConfig = (destination) => {
   const { accountSecret } = destination.Config;
@@ -54,7 +56,6 @@ const validateConfig = (destination) => {
 const processIdentify = (message, destination) => {
   validateConfig(destination);
   
-  const { accountSecret } = destination.Config;
   const payload = constructPayload(message, mappingConfig[ConfigCategory.IDENTIFY.name]);
   
   // Validate required fields
@@ -62,7 +63,7 @@ const processIdentify = (message, destination) => {
     throw new InstrumentationError('Either userId or anonymousId is required for identify events');
   }
   
-  const endpoint = getEndpoint(accountSecret, 'identify');
+  const endpoint = getEndpoint('identify');
   return buildResponse(payload, endpoint, destination);
 };
 
@@ -75,7 +76,6 @@ const processIdentify = (message, destination) => {
 const processTrack = (message, destination) => {
   validateConfig(destination);
   
-  const { accountSecret } = destination.Config;
   const payload = constructPayload(message, mappingConfig[ConfigCategory.TRACK.name]);
   
   // Validate required fields
@@ -83,30 +83,10 @@ const processTrack = (message, destination) => {
     throw new InstrumentationError('Event name is required for track events');
   }
   
-  const endpoint = getEndpoint(accountSecret, 'track');
+  const endpoint = getEndpoint('track');
   return buildResponse(payload, endpoint, destination);
 };
 
-/**
- * Process page events
- * @param {Object} message - Rudderstack event message  
- * @param {Object} destination - Destination configuration
- * @returns {Object} Response object
- */
-const processPage = (message, destination) => {
-  validateConfig(destination);
-  
-  const { accountSecret } = destination.Config;
-  const payload = constructPayload(message, mappingConfig[ConfigCategory.PAGE.name]);
-  
-  // Set event name for page views if not provided
-  if (!payload.name || payload.name.trim() === '') {
-    payload.name = 'Page Viewed';
-  }
-  
-  const endpoint = getEndpoint(accountSecret, 'page');
-  return buildResponse(payload, endpoint, destination);
-};
 
 /**
  * Process group events
@@ -117,7 +97,6 @@ const processPage = (message, destination) => {
 const processGroup = (message, destination) => {
   validateConfig(destination);
   
-  const { accountSecret } = destination.Config;
   const payload = constructPayload(message, mappingConfig[ConfigCategory.GROUP.name]);
   
   // Validate required fields
@@ -125,7 +104,7 @@ const processGroup = (message, destination) => {
     throw new InstrumentationError('Group ID (groupId) is required for group events');
   }
   
-  const endpoint = getEndpoint(accountSecret, 'group');
+  const endpoint = getEndpoint('group');
   return buildResponse(payload, endpoint, destination);
 };
 
@@ -147,13 +126,11 @@ const processSingleEvent = (message, destination) => {
       return processIdentify(message, destination);
     case 'track':
       return processTrack(message, destination);
-    case 'page':
-      return processPage(message, destination);
     case 'group':
       return processGroup(message, destination);
     default:
       throw new InstrumentationError(
-        `Message type "${messageType}" is not supported. Supported types: identify, track, page, group`
+        `Message type "${messageType}" is not supported. Supported types: identify, track, group`
       );
   }
 };
